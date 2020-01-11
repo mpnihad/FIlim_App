@@ -174,7 +174,7 @@
         
         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
         />
-    <com.aipsoft.salesorder.Utils.ExpandableTextView
+    <com.nihad.filim_app.Utils.ExpandableTextView
         android:gravity="start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

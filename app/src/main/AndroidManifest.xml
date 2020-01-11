@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.aipsoft.salesorder">
+    package="com.nihad.filim_app">
 
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
@@ -29,9 +29,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.imp.Activity.filimViews"></activity>
+        <activity android:name="com.nihad.filim_app.view.imp.Activity.filimViews"></activity>
         <activity
-            android:name=".view.imp.Activity.MainActivity"
+            android:name="com.nihad.filim_app.view.imp.Activity.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
