@@ -19,4 +19,6 @@ public class MainActivityPresenter {
             interactor.getList();
 
     }
+
+
 }

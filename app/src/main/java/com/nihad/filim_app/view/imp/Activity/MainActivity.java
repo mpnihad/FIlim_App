@@ -1,5 +1,6 @@
 package com.nihad.filim_app.view.imp.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -87,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     public class getdata extends AsyncTask {

@@ -1,8 +1,31 @@
 package com.nihad.filim_app.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity()
 public class FilimModel  implements Serializable {
+
+
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    public FilimModel(int id, String title, String episode_id, String opening_crawl, String director, String producer, String release_date, String url, String created, String edited) {
+        this.id = id;
+        this.title = title;
+        this.episode_id = episode_id;
+        this.opening_crawl = opening_crawl;
+        this.director = director;
+        this.producer = producer;
+        this.release_date = release_date;
+        this.url = url;
+        this.created = created;
+        this.edited = edited;
+    }
 
     String title ;
     String episode_id ;
@@ -10,6 +33,24 @@ public class FilimModel  implements Serializable {
     String director ;
     String producer ;
     String release_date ;
+
+    String url;
+    String created ;
+    String edited ;
+
+
+    @Ignore
+    String[] species ;
+    @Ignore
+    String[] starships ;
+    @Ignore
+    String[] vehicles ;
+    @Ignore
+    String[] characters ;
+    @Ignore
+    String[] planets ;
+
+
 
     public String[] getSpecies() {
         return species;
@@ -51,14 +92,7 @@ public class FilimModel  implements Serializable {
         this.planets = planets;
     }
 
-    String[] species ;
-    String[] starships ;
-    String[] vehicles ;
-    String[] characters ;
-    String[] planets ;
-    String url;
-    String created ;
-    String edited ;
+
 
     public String getTitle() {
         return title;
@@ -131,6 +165,14 @@ public class FilimModel  implements Serializable {
 
     public void setEdited(String edited) {
         this.edited = edited;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 

@@ -1,5 +1,6 @@
 package com.nihad.filim_app.view.view;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.nihad.filim_app.model.FilimModel;
@@ -16,4 +17,6 @@ public interface MainActivityCallback {
     void makeToast(String message);
 
     void filmView(FilimModel filimModel);
+
+    Context getContext();
 }

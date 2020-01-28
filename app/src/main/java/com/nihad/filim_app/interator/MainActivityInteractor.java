@@ -1,6 +1,7 @@
 package com.nihad.filim_app.interator;
 
 import com.nihad.filim_app.Utils.APIService;
+import com.nihad.filim_app.database.repository.FilimModelRepository;
 import com.nihad.filim_app.model.FilimModel;
 import com.nihad.filim_app.view.view.MainActivityCallback;
 import com.google.gson.Gson;
@@ -22,6 +23,7 @@ public class MainActivityInteractor {
     }
 
     public void getList() {
+        FilimModelRepository filimModelRepository;
 
         callback.visibleProgress(true);
 
@@ -45,8 +47,15 @@ public class MainActivityInteractor {
                     {
                         jsonObject=jsonArray.get(i).getAsJsonObject();
                         FilimModel filimModel = new Gson().fromJson(jsonObject, FilimModel.class);
+                        FilimModelRepository filimModelsRepository =new FilimModelRepository(callback.getContext());
+                        filimModelsRepository.insertTask(filimModel);
                         filimModels.add(filimModel);
                     }
+
+
+
+
+
 
 
 
