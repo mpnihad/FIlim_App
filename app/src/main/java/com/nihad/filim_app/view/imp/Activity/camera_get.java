@@ -62,8 +62,6 @@ public class camera_get extends AppCompatActivity {
         btnStartCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 imageUri = Uri.fromFile(new File(outputPath));
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);

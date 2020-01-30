@@ -5,6 +5,7 @@ import android.util.Log;
 import com.nihad.filim_app.Utils.APIService;
 import com.nihad.filim_app.database.repository.FilimModelRepository;
 import com.nihad.filim_app.model.FilimModel;
+import com.nihad.filim_app.model.ResponseClass;
 import com.nihad.filim_app.view.view.MainActivityCallback;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -94,36 +95,32 @@ public class MainActivityInteractor {
 
     public void getList(FilimModelRepository repository) {
         callback.visibleProgress(true);
-        service = NetworkService.getService();
+        service = NetworkService.getClient(callback.getContext()).create(APIService.class);;
         callback.getdisposible().add(
                 service.filimlist()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .map(new Function<List<FilimModel>, List<FilimModel>>() {
+                        .map(new Function<ResponseClass, ResponseClass>() {
                             @Override
-                            public List<FilimModel> apply(List<FilimModel> notes) throws Exception {
+                            public ResponseClass apply(ResponseClass responseClass) throws Exception {
                                 // TODO - note about sort
-                                Collections.sort(notes, new Comparator<FilimModel>() {
-                                    @Override
-                                    public int compare(FilimModel n1, FilimModel n2) {
-                                        return n2.getId() - n1.getId();
-                                    }
-                                });
-                                return notes;
+
+                                return responseClass;
                             }
                         })
-                        .subscribeWith(new DisposableSingleObserver<List<FilimModel>>() {
+                        .subscribeWith(new DisposableSingleObserver<ResponseClass>() {
                             @Override
-                            public void onSuccess(List<FilimModel> filimModels) {
+                            public void onSuccess(ResponseClass responseClass) {
+
                                 if(repository!=null) {
-                                    for (FilimModel filimModel : filimModels) {
+                                    for (FilimModel filimModel : responseClass.getFilimModels()) {
 
                                         repository.insertTask(filimModel);
                                     }
 
                                 }
 
-                                ArrayList<FilimModel> filimModels1 = new ArrayList<>(filimModels);
+//                                ArrayList<FilimModel> filimModels1 = new ArrayList<>(filimModels);
                                 callback.visibleProgress(false);
                             }
 

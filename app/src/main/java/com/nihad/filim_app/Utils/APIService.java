@@ -2,6 +2,7 @@ package com.nihad.filim_app.Utils;
 
 import com.google.gson.JsonObject;
 import com.nihad.filim_app.model.FilimModel;
+import com.nihad.filim_app.model.ResponseClass;
 
 import java.util.List;
 import java.util.Observable;
@@ -23,7 +24,7 @@ public interface APIService {
     );
 
     @GET("films")
-    Single<List<FilimModel>> filimlist();
+    Single<ResponseClass> filimlist();
 
 
     @FormUrlEncoded

@@ -1,5 +1,7 @@
 package com.nihad.filim_app.view.view;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 public interface filimViewsCallBack {
@@ -11,4 +13,5 @@ public interface filimViewsCallBack {
     void makeToast(String message);
 
 
+    Context getContext();
 }

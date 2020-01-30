@@ -26,7 +26,7 @@ public class filimViewsInteractor {
 
 
 
-        service = NetworkService.getService();
+        service = NetworkService.getClient(callback.getContext()).create(APIService.class);;
 
         ArrayList<String> names=new ArrayList<>();
         for (int i=0;i<characters.length;i++) {

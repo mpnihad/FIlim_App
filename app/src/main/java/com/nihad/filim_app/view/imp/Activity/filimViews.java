@@ -3,6 +3,7 @@ package com.nihad.filim_app.view.imp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -240,5 +241,10 @@ public class filimViews extends AppCompatActivity implements filimViewsCallBack 
     @Override
     public void makeToast(String message) {
 
+    }
+
+    @Override
+    public Context getContext() {
+        return filimViews.this;
     }
 }
