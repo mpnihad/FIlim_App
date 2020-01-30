@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.nihad.filim_app.model.FilimModel;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import io.reactivex.Single;
 import retrofit2.Call;

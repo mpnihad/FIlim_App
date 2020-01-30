@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -16,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".view.imp.Activity.RecordPage"></activity>
+        <activity android:name=".view.imp.Activity.camera_get"></activity>
+        <activity android:name=".view.imp.Activity.RecordPage" />
         <activity android:name=".view.imp.Activity.filimViews" />
         <activity
             android:name=".view.imp.Activity.MainActivity"

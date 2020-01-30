@@ -74,6 +74,12 @@ public class MainActivity extends AppCompatActivity implements
                     disposable.dispose();
                     startActivity(intent);
                 }
+                else if(item.getItemId()==R.id.menu_main_Camera)
+                {
+                    Intent intent=new Intent(MainActivity.this,camera_get.class);
+                    disposable.dispose();
+                    startActivity(intent);
+                }
 
                 return false;
             }
