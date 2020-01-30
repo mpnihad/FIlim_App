@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nihad.filim_app.R;
+import com.nihad.filim_app.ViewModel.FilimViewModel;
 import com.nihad.filim_app.adapter.FilimListAdapter;
 import com.nihad.filim_app.model.FilimModel;
 import com.nihad.filim_app.presenter.MainActivityPresenter;
@@ -21,6 +26,8 @@ import com.nihad.filim_app.view.view.MainActivityCallback;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements
         MainActivityCallback {
@@ -28,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements
     RecyclerView filimList;
     ProgressBar loading;
     private MainActivityPresenter presenter;
+    private FilimListAdapter mAdapter;
+    FilimViewModel filimViewModel;
+    List<FilimModel> filimModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +46,74 @@ public class MainActivity extends AppCompatActivity implements
 
         filimList=findViewById(R.id.filimlist);
         loading=findViewById(R.id.progressbar);
+        filimModel=new ArrayList<>();
 
-        presenter.getList();
+        filimViewModel = ViewModelProviders.of(this).get(FilimViewModel.class);
+//        mAdapter = new FilimListAdapter(this);
+
+        ArrayList<FilimModel> filimModels=new ArrayList<>();
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                filimList.setLayoutManager(layoutManager);
+        mAdapter = new FilimListAdapter(this);
+                filimList.setAdapter(mAdapter);
+
+//        filimViewModel.getAllFilim().observe(this, filimModel -> {
+//            Log.d("called", filimModels.toString());
+//            mAdapter.show_data(filimModels); } );
+
+        filimViewModel.getAllFilim().observe(this, new Observer<List<FilimModel>>() {
+            @Override
+            public void onChanged(@Nullable List<FilimModel> filimModels) {
+
+//                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                filimList.setLayoutManager(layoutManager);
+//                FilimListAdapter filimListAdapter = new FilimListAdapter(MainActivity.this, (ArrayList<FilimModel>) filimModels,MainActivity.this);
+//                filimList.setAdapter(filimListAdapter);
+
+
+                mAdapter.submitList((ArrayList<FilimModel>) filimModels);
+
+
+            }
+        });
+
+
+
+        filimViewModel.getcount().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer count) {
+
+//                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                filimList.setLayoutManager(layoutManager);
+//                FilimListAdapter filimListAdapter = new FilimListAdapter(MainActivity.this, (ArrayList<FilimModel>) filimModels,MainActivity.this);
+//                filimList.setAdapter(filimListAdapter);
+
+
+                if(count!=0)
+                {
+                    visibleProgress(false);
+                }
+
+
+            }
+        });
+        presenter.getList(filimViewModel.getRepository());
+
+
+
 
 
 
 
 
     }
+
+
 
     @Override
     public void visibleProgress(boolean b) {
@@ -66,11 +136,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void showList(ArrayList<FilimModel> filimModels) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        filimList.setLayoutManager(layoutManager);
-        FilimListAdapter filimListAdapter = new FilimListAdapter(this,filimModels,this);
-        filimList.setAdapter(filimListAdapter);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        filimList.setLayoutManager(layoutManager);
+//        FilimListAdapter filimListAdapter = new FilimListAdapter(this);
+//        filimList.setAdapter(filimListAdapter);
 
     }
 

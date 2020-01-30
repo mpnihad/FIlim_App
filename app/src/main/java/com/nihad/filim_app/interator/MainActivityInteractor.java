@@ -22,7 +22,7 @@ public class MainActivityInteractor {
         this.callback = callback;
     }
 
-    public void getList() {
+    public void getList(FilimModelRepository repository) {
         FilimModelRepository filimModelRepository;
 
         callback.visibleProgress(true);
@@ -37,6 +37,7 @@ public class MainActivityInteractor {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
+
                 String abc=response.body().toString();
                 if (response.isSuccessful()) {
                     JsonObject jsonObject;
@@ -48,8 +49,11 @@ public class MainActivityInteractor {
                         jsonObject=jsonArray.get(i).getAsJsonObject();
                         FilimModel filimModel = new Gson().fromJson(jsonObject, FilimModel.class);
                         FilimModelRepository filimModelsRepository =new FilimModelRepository(callback.getContext());
-                        filimModelsRepository.insertTask(filimModel);
+                        if(repository!=null) {
+                            repository.insertTask(filimModel);
+                        }
                         filimModels.add(filimModel);
+                        callback.visibleProgress(false);
                     }
 
 
@@ -59,7 +63,7 @@ public class MainActivityInteractor {
 
 
 
-                    callback.showList(filimModels);
+                    //callback.showList(filimModels);
                 } else {
                     callback.makeToast(response.body().get("message").toString().replaceAll("^\"|\"$", ""));
 

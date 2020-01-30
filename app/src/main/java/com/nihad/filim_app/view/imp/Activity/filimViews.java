@@ -87,7 +87,7 @@ public class filimViews extends AppCompatActivity implements filimViewsCallBack 
         filim_title.setText(filimModel.getTitle());
         filim_body.setText(filimModel.getOpening_crawl());
         filim_director.setText(filimModel.getDirector());
-        filim_episode.setText(filimModel.getEpisode_id());
+        filim_episode.setText(String.valueOf(filimModel.getEpisode_id()));
 
         filim_release_date.setText(filimModel.getRelease_date());
         filim_producer.setText(filimModel.getProducer());

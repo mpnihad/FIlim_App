@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nihad.filim_app.R;
@@ -16,30 +18,46 @@ import com.nihad.filim_app.view.view.MainActivityCallback;
 
 import java.util.ArrayList;
 
-public class FilimListAdapter extends RecyclerView.Adapter<FilimListAdapter.MyViewHolder> {
+public class FilimListAdapter extends ListAdapter<FilimModel,FilimListAdapter.MyViewHolder> {
 
-    LayoutInflater inflater;
-    Context context;
+
 
     MainActivityCallback callback;
 
-    ArrayList<FilimModel> filimModels = new ArrayList<>();
 
 
+//    public FilimListAdapter(Context context1, ArrayList<FilimModel> filimModels, MainActivityCallback callback) {
+//
+//        try {
+//            context = context1;
+//            inflater = LayoutInflater.from(context1);
+//            this.filimModels = filimModels;
+//            this.callback = callback;
+//
+//
+//        } catch (Exception e) {
+//
+//            Log.d("Error", e.toString());
+//        }
+//    }
 
-    public FilimListAdapter(Context context1, ArrayList<FilimModel> filimModels, MainActivityCallback callback) {
 
-        try {
-            context = context1;
-            inflater = LayoutInflater.from(context1);
-            this.filimModels = filimModels;
-            this.callback = callback;
-
-
-        } catch (Exception e) {
-
-            Log.d("Error", e.toString());
+    private static final DiffUtil.ItemCallback<FilimModel>DIFF_CALLBACK = new DiffUtil.ItemCallback<FilimModel>() {
+        @Override
+        public boolean areItemsTheSame(FilimModel oldItem,FilimModel newItem) {
+            return oldItem.getId()==newItem.getId();
         }
+
+        @Override
+        public boolean areContentsTheSame(FilimModel oldItem,FilimModel newItem) {
+            return oldItem.getTitle().equals(newItem.getTitle());
+        }
+    };
+
+    public FilimListAdapter(MainActivityCallback callback) {
+        super(DIFF_CALLBACK);
+        this.callback=callback;
+
     }
 
 
@@ -61,12 +79,12 @@ public class FilimListAdapter extends RecyclerView.Adapter<FilimListAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
 
-        holder.title.setText(filimModels.get(position).getTitle());
-        holder.releaseDate.setText(filimModels.get(position).getRelease_date());
+        holder.title.setText(getItem(position).getTitle());
+        holder.releaseDate.setText(getItem(position).getRelease_date());
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.filmView(filimModels.get(position));
+                callback.filmView(getItem(position));
 
             }
         });
@@ -76,10 +94,6 @@ public class FilimListAdapter extends RecyclerView.Adapter<FilimListAdapter.MyVi
 
 
 
-    @Override
-    public int getItemCount() {
-        return filimModels.size();
-    }
 
 
 

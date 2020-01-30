@@ -3,6 +3,9 @@ package com.nihad.filim_app.model;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+
 
 import java.io.Serializable;
 
@@ -11,13 +14,13 @@ public class FilimModel  implements Serializable {
 
 
 
-    @PrimaryKey(autoGenerate = true)
+
     private int id;
 
-    public FilimModel(int id, String title, String episode_id, String opening_crawl, String director, String producer, String release_date, String url, String created, String edited) {
+    public FilimModel(int id, String title, int episode_id, String opening_crawl, String director, String producer, String release_date, String url, String created, String edited) {
         this.id = id;
         this.title = title;
-        this.episode_id = episode_id;
+        this.episode_id =episode_id;
         this.opening_crawl = opening_crawl;
         this.director = director;
         this.producer = producer;
@@ -28,7 +31,10 @@ public class FilimModel  implements Serializable {
     }
 
     String title ;
-    String episode_id ;
+
+    @PrimaryKey()
+    int episode_id ;
+
     String opening_crawl ;
     String director ;
     String producer ;
@@ -39,15 +45,15 @@ public class FilimModel  implements Serializable {
     String edited ;
 
 
-    @Ignore
+
     String[] species ;
-    @Ignore
+
     String[] starships ;
-    @Ignore
+
     String[] vehicles ;
-    @Ignore
+
     String[] characters ;
-    @Ignore
+
     String[] planets ;
 
 
@@ -102,11 +108,11 @@ public class FilimModel  implements Serializable {
         this.title = title;
     }
 
-    public String getEpisode_id() {
+    public int getEpisode_id() {
         return episode_id;
     }
 
-    public void setEpisode_id(String episode_id) {
+    public void setEpisode_id(int episode_id) {
         this.episode_id = episode_id;
     }
 

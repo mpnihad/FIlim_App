@@ -33,6 +33,10 @@ android {
 }
 
 dependencies {
+
+    def glideVersion = "4.10.0"
+
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -52,4 +56,16 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Glide RecyclerView Preloader
+    implementation ("com.github.bumptech.glide:recyclerview-integration:$glideVersion") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
 }

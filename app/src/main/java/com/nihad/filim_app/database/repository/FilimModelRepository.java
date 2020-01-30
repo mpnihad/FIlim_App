@@ -7,18 +7,18 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
-import com.nihad.filim_app.database.db.NoteDatabase;
+import com.nihad.filim_app.database.db.FilimDatabase;
 import com.nihad.filim_app.model.FilimModel;
 
 import java.util.List;
 
 public class FilimModelRepository {
 
-    private String DB_NAME = "db_task";
+    private String DB_NAME = "filim_db";
 
-    private NoteDatabase noteDatabase;
+    private FilimDatabase filimDatabase;
     public FilimModelRepository(Context context) {
-        noteDatabase = Room.databaseBuilder(context, NoteDatabase.class, DB_NAME).build();
+        filimDatabase = Room.databaseBuilder(context, FilimDatabase.class, DB_NAME).build();
     }
 
     public void insertTask(String title,
@@ -27,7 +27,7 @@ public class FilimModelRepository {
       //  insertTask(title, description, false, null);
     }
 
-    public void insertTask1(FilimModel account_group) {
+    public void insertTask1(FilimModel filim_db_Model) {
 
 
 //        note.setTitle(title);
@@ -41,15 +41,16 @@ public class FilimModelRepository {
 //            note.setPassword(AppUtils.generateHash(password));
 //        } else note.setPassword(null);
 
-        insertTask(account_group);
+        insertTask(filim_db_Model);
     }
 
-    public void insertTask(final FilimModel account_group) {
+
+    public void insertTask(final FilimModel filim_db_Model) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    noteDatabase.daoAccess().insertTask(account_group);
+                    filimDatabase.daoAccess().insertTask(filim_db_Model);
                 }catch (Exception e){
 
                 }
@@ -58,13 +59,13 @@ public class FilimModelRepository {
         }.execute();
     }
 
-    public void updateTask(final FilimModel account_group) {
+    public void updateTask(final FilimModel filim_db_Model) {
 //        note.setModifiedAt(AppUtils.getCurrentDateTime());
 
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                noteDatabase.daoAccess().updateTask(account_group);
+                filimDatabase.daoAccess().updateTask(filim_db_Model);
                 return null;
             }
         }.execute();
@@ -76,28 +77,33 @@ public class FilimModelRepository {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    noteDatabase.daoAccess().deleteTask(task.getValue());
+                    filimDatabase.daoAccess().deleteTask(task.getValue());
                     return null;
                 }
             }.execute();
         }
     }
 
-    public void deleteTask(final FilimModel account_group) {
+    public void deleteTask(final FilimModel filim_db_Model) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                noteDatabase.daoAccess().deleteTask(account_group);
+                filimDatabase.daoAccess().deleteTask(filim_db_Model);
                 return null;
             }
         }.execute();
     }
 
     public LiveData<FilimModel> getTask(int id) {
-        return noteDatabase.daoAccess().getTask_group(id);
+        return filimDatabase.daoAccess().getTask_group(id);
     }
 
     public LiveData<List<FilimModel>> getTasks() {
-        return noteDatabase.daoAccess().fetchAllTasks_group();
+        return filimDatabase.daoAccess().fetchAllTasks_group();
+    }
+
+
+    public LiveData<Integer> getcount() {
+        return filimDatabase.daoAccess().getCount();
     }
 }
