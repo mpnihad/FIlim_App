@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,21 +32,55 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class MainActivity extends AppCompatActivity implements
         MainActivityCallback {
+
+
 
     RecyclerView filimList;
     ProgressBar loading;
     private MainActivityPresenter presenter;
+    private CompositeDisposable disposable ;
     private FilimListAdapter mAdapter;
     FilimViewModel filimViewModel;
     List<FilimModel> filimModel;
+    Toolbar mTopToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainActivityPresenter(this);
 
+
+        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mTopToolbar);
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(2);
+
+        mTopToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if(item.getItemId()==R.id.menu_main_record)
+                {
+                    Intent intent=new Intent(MainActivity.this,RecordPage.class);
+                    disposable.dispose();
+                    startActivity(intent);
+                }
+
+                return false;
+            }
+        });
+
+        presenter = new MainActivityPresenter(this);
+        disposable = new CompositeDisposable();
         filimList=findViewById(R.id.filimlist);
         loading=findViewById(R.id.progressbar);
         filimModel=new ArrayList<>();
@@ -113,6 +150,12 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
 
     @Override
@@ -163,6 +206,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public CompositeDisposable getdisposible() {
+        return disposable;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
     }
 
     public class getdata extends AsyncTask {

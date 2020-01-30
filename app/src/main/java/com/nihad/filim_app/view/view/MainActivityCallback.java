@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import com.nihad.filim_app.model.FilimModel;
 
 import java.util.ArrayList;
+import java.util.StringJoiner;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public interface MainActivityCallback {
     void visibleProgress(boolean b);
@@ -19,4 +22,6 @@ public interface MainActivityCallback {
     void filmView(FilimModel filimModel);
 
     Context getContext();
+
+    CompositeDisposable getdisposible();
 }

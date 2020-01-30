@@ -1,5 +1,6 @@
 package com.nihad.filim_app.interator;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.nihad.filim_app.BuildConfig;
 import com.nihad.filim_app.Utils.APIService;
 import com.google.gson.Gson;
@@ -22,6 +23,7 @@ public abstract class NetworkService {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         service = retrofit.create(APIService.class);

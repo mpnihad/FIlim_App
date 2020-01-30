@@ -1,7 +1,11 @@
 package com.nihad.filim_app.Utils;
 
 import com.google.gson.JsonObject;
+import com.nihad.filim_app.model.FilimModel;
 
+import java.util.List;
+
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -17,7 +21,7 @@ public interface APIService {
     );
 
     @GET("films")
-    Call<JsonObject> filimlist();
+    Single<List<FilimModel>> filimlist();
 
 
     @FormUrlEncoded
