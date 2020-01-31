@@ -1,107 +1,59 @@
 package com.nihad.filim_app.view.imp.Activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import com.nihad.filim_app.BuildConfig;
 import com.nihad.filim_app.R;
+import com.nihad.filim_app.presenter.MainActivityPresenter;
+import com.nihad.filim_app.presenter.camera_getPresenter;
+import com.nihad.filim_app.view.view.camera_getCallBack;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class camera_get extends AppCompatActivity {
+public class camera_get extends AppCompatActivity implements camera_getCallBack {
 
-//    protected static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 0;
-//    @BindView(R.id.btn_start_capture)
-//    Button btnStartCapture;
-//    Uri imageUri ;
-//    String outputPath;
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_camera_get);
-//        ButterKnife.bind(this);
-//
-//        Calendar c = Calendar.getInstance();
-//        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-//        String formattedDate = df.format(c.getTime());
-//        String PATH = "storage/emulated/0/AudioFile";
-//        String fileName =  formattedDate + ".jpg";
-//
-//        File directory = new File(PATH);
-//        if (! directory.exists()){
-//            directory.mkdir();
-//            // If you require it to make the entire directory path including parents,
-//            // use directory.mkdirs(); here instead.
-//        }
-//
-//        File file = new File(PATH + "/" + fileName);
-//
-//
-//
-//
-//
-////        Environment.getRootDirectory();
-////        File sdcard = Environment.getRootDirectory();
-////        File file = new File(sdcard, "file path");
-////        outputPath = "storage/emulated/0/AudioFile" + formattedDate + ".3gp";
-//        outputPath = file.getPath();
-//        btnStartCapture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"fname_" +
-//                        String.valueOf(System.currentTimeMillis()) + ".jpg"));
-//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
-//                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-//
-//                //use imageUri here to access the image
-//
-//                Bundle extras = data.getExtras();
-//
-//                Log.e("URI", imageUri.toString());
-//
-//                Bitmap bmp = (Bitmap) extras.get("data");
-//
-//                // here you will get the image as bitmap
-//
-//
-//            } else if (resultCode == RESULT_CANCELED) {
-//                Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT);
-//            }
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//
-//    }
+    public static final int MULTIPLE_PERMISSIONS = 10; // code you want.
 
-
-    private static final String EXTRA_FILENAME =
-            "com.commonsware.android.camcon.EXTRA_FILENAME";
-    private static final String FILENAME = "CameraContentDemo.jpeg";
-    private static final int CONTENT_REQUEST = 1337;
     @BindView(R.id.btn_start_capture)
     Button btnStartCapture;
-    private File output = null;
+
+    @BindView(R.id.preview)
+    ImageView preview;
+
+    private static int RESULT_IMAGE_CLICK = 1;
+    String datas;
+    camera_getPresenter presenter;
+
+    Uri cameraImageUri;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,54 +62,92 @@ public class camera_get extends AppCompatActivity {
         setContentView(R.layout.activity_camera_get);
         ButterKnife.bind(this);
 
+
+        presenter = new camera_getPresenter(this);
+
+
+        checkPermissions();
+        cameraImageUri = presenter.getOutputMediaFileUri(1);
         btnStartCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                if (savedInstanceState == null) {
-                    File dir = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-
-                    dir.mkdirs();
-                    output = new File(dir, FILENAME);
-                } else {
-                    output = (File) savedInstanceState.getSerializable(EXTRA_FILENAME);
-                }
-
-                if (output.exists()) {
-                    output.delete();
-                }
-
-                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
-
-                startActivityForResult(i, CONTENT_REQUEST);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
+                startActivityForResult(intent, RESULT_IMAGE_CLICK);
             }
         });
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        outState.putSerializable(EXTRA_FILENAME, output);
+    String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+    };
+
+
+    private boolean checkPermissions() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(camera_get.this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CONTENT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
 
-                i.setDataAndType(Uri.fromFile(output), "image/jpeg");
-                startActivity(i);
-                finish();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MULTIPLE_PERMISSIONS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG)
+                            .show();
+                }
+
             }
+            return;
         }
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_IMAGE_CLICK) {
+
+                Log.e("Image Name", datas);
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(datas);
+
+                preview.setImageBitmap(myBitmap);
+
+
+
+            }
+
+
+        }
+    }
+
+    @Override
+    public Context getContext() {
+        return camera_get.this;
+    }
+
+    @Override
+    public void storeDatas(String path) {
+        datas = path;
+    }
 }

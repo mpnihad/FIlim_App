@@ -5,8 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.imp.Activity.camera_get">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/preview"
+        android:layout_above="@+id/btn_start_capture"/>
 
     <Button
+
         android:layout_marginBottom="50sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
