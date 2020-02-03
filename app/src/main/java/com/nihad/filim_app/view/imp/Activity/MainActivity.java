@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements
     private CompositeDisposable disposable ;
     private FilimListAdapter mAdapter;
     FilimViewModel filimViewModel;
-    List<FilimModel> filimModel;
+    PagedList<FilimModel> filimModel;
     Toolbar mTopToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements
         disposable = new CompositeDisposable();
         filimList=findViewById(R.id.filimlist);
         loading=findViewById(R.id.progressbar);
-        filimModel=new ArrayList<>();
+
 
         filimViewModel = ViewModelProviders.of(this).get(FilimViewModel.class);
 //        mAdapter = new FilimListAdapter(this);
@@ -107,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements
 //            Log.d("called", filimModels.toString());
 //            mAdapter.show_data(filimModels); } );
 
-        filimViewModel.getAllFilim().observe(this, new Observer<List<FilimModel>>() {
+        filimViewModel.getAllFilim().observe(this, new Observer<PagedList<FilimModel>>() {
             @Override
-            public void onChanged(@Nullable List<FilimModel> filimModels) {
+            public void onChanged(@Nullable PagedList<FilimModel> filimModels) {
 
 //                LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 //                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements
 //                filimList.setAdapter(filimListAdapter);
 
 
-                mAdapter.submitList((ArrayList<FilimModel>) filimModels);
+                mAdapter.submitList( filimModels);
 
 
             }

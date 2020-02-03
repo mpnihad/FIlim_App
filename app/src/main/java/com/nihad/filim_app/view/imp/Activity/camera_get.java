@@ -4,12 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -20,20 +18,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.nihad.filim_app.BuildConfig;
 import com.nihad.filim_app.R;
-import com.nihad.filim_app.presenter.MainActivityPresenter;
-import com.nihad.filim_app.presenter.camera_getPresenter;
+import com.nihad.filim_app.ViewModel.camera_getViewModel;
 import com.nihad.filim_app.view.view.camera_getCallBack;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,9 +47,11 @@ public class camera_get extends AppCompatActivity implements camera_getCallBack 
 
     private static int RESULT_IMAGE_CLICK = 1;
     String datas;
-    camera_getPresenter presenter;
+    camera_getViewModel camera_getViewModel;
 
     Uri cameraImageUri;
+    @BindView(R.id.bottomBlurView)
+    View bottomBlurView;
 
 
     @Override
@@ -62,15 +61,26 @@ public class camera_get extends AppCompatActivity implements camera_getCallBack 
         setContentView(R.layout.activity_camera_get);
         ButterKnife.bind(this);
 
+        camera_getViewModel = ViewModelProviders.of(this).get(camera_getViewModel.class);
 
-        presenter = new camera_getPresenter(this);
+
+
+
 
 
         checkPermissions();
-        cameraImageUri = presenter.getOutputMediaFileUri(1);
+
         btnStartCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<Uri, String> map = new HashMap<Uri, String>();
+
+                map = camera_getViewModel.getOutputMediaFileUri(1);
+                for (Map.Entry<Uri, String> entry : map.entrySet()) {
+                    cameraImageUri = entry.getKey();
+                    datas = entry.getValue();
+                }
+
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
@@ -127,12 +137,25 @@ public class camera_get extends AppCompatActivity implements camera_getCallBack 
         if (resultCode == RESULT_OK) {
             if (requestCode == RESULT_IMAGE_CLICK) {
 
+
+                File dest = new File(datas);
+
+                Bitmap bitmap = BitmapFactory.decodeFile(datas);
+                try {
+                    FileOutputStream out = new FileOutputStream(dest);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 10, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
                 Log.e("Image Name", datas);
 
-                Bitmap myBitmap = BitmapFactory.decodeFile(datas);
+//                Bitmap myBitmap = BitmapFactory.decodeFile(datas);
 
-                preview.setImageBitmap(myBitmap);
-
+                preview.setImageBitmap(bitmap);
 
 
             }

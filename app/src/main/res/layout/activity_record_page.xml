@@ -6,7 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".view.imp.Activity.RecordPage">
 
+<LinearLayout
 
+    android:gravity="center"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <Button
         android:layout_marginBottom="50sp"
         android:layout_alignParentBottom="true"
@@ -14,6 +20,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnStartRecording"
         android:text="Start Recording"/>
+    <Button
+
+        android:layout_marginBottom="50sp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPause"
+        android:text="Pause"/>
+    <Button
+        android:layout_marginBottom="50sp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPlay"
+        android:text="Play"/>
     <Button
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="50sp"
@@ -23,4 +44,5 @@
         android:id="@+id/btnStopRecording"
         android:text="Stop Recording"
         />
+</LinearLayout>
 </RelativeLayout>

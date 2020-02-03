@@ -2,6 +2,7 @@ package com.nihad.filim_app.database.dao;
 
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,7 +16,6 @@ import com.nihad.filim_app.model.FilimModel;
 import java.util.List;
 
 
-
 @Dao
 public interface DaoAccess {
 
@@ -26,7 +26,7 @@ public interface DaoAccess {
 
 
     @Query("SELECT * FROM FilimModel ORDER BY id desc")
-    LiveData<List<FilimModel>> fetchAllTasks_group();
+    public abstract DataSource.Factory<Integer, FilimModel> fetchAllTasks_group();
 
     @Query("SELECT COUNT(*) FROM FilimModel")
     LiveData<Integer> getCount();

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +19,7 @@ import com.nihad.filim_app.view.view.MainActivityCallback;
 
 import java.util.ArrayList;
 
-public class FilimListAdapter extends ListAdapter<FilimModel,FilimListAdapter.MyViewHolder> {
+public class FilimListAdapter extends PagedListAdapter<FilimModel,FilimListAdapter.MyViewHolder> {
 
 
 

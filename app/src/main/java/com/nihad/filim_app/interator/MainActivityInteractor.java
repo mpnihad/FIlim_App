@@ -7,22 +7,13 @@ import com.nihad.filim_app.database.repository.FilimModelRepository;
 import com.nihad.filim_app.model.FilimModel;
 import com.nihad.filim_app.model.ResponseClass;
 import com.nihad.filim_app.view.view.MainActivityCallback;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Observable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivityInteractor {
     private MainActivityCallback callback;
@@ -95,7 +86,10 @@ public class MainActivityInteractor {
 
     public void getList(FilimModelRepository repository) {
         callback.visibleProgress(true);
-        service = NetworkService.getClient(callback.getContext()).create(APIService.class);;
+        service = NetworkService.getClient(callback.getContext()).create(APIService.class);
+
+
+
         callback.getdisposible().add(
                 service.filimlist()
                         .subscribeOn(Schedulers.io())
@@ -134,5 +128,7 @@ public class MainActivityInteractor {
                         })
         );
     }
+
+
 
 }

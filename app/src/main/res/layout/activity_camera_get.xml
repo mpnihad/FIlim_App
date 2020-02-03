@@ -5,19 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.imp.Activity.camera_get">
+
+
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/preview"
-        android:layout_above="@+id/btn_start_capture"/>
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:rotation="90"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bottomBlurView"
+        android:layout_width="266dp"
+        android:layout_height="76dp"
+        android:layout_alignBottom="@+id/preview"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/preview"
+        app:layout_constraintEnd_toEndOf="@+id/preview"
+        />
 
     <Button
-
-        android:layout_marginBottom="50sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/preview"
+        android:id="@+id/btn_start_capture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_start_capture"
-        android:text="Capture"/>
+        android:text="Capture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 </RelativeLayout>

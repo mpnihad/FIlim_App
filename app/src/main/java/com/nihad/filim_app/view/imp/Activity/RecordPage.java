@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +14,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.nihad.filim_app.R;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -33,6 +29,10 @@ public class RecordPage extends AppCompatActivity {
     Button btnStartRecording;
 
     Button btnStopRecording;
+    @BindView(R.id.btnPause)
+    Button btnPause;
+    @BindView(R.id.btnPlay)
+    Button btnPlay;
 
     private MediaRecorder mr;
     private String outputPath;
@@ -45,13 +45,14 @@ public class RecordPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_page);
+        ButterKnife.bind(this);
 
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
 
 
-        btnStartRecording=findViewById(R.id.btnStartRecording);
-        btnStopRecording=findViewById(R.id.btnStopRecording);
+        btnStartRecording = findViewById(R.id.btnStartRecording);
+        btnStopRecording = findViewById(R.id.btnStopRecording);
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String formattedDate = df.format(c.getTime());
@@ -60,19 +61,16 @@ public class RecordPage extends AppCompatActivity {
 
 
         String PATH = "storage/emulated/0/AudioFile";
-         String fileName =  formattedDate + ".3gp";
+        String fileName = formattedDate + ".3gp";
 
         File directory = new File(PATH);
-        if (! directory.exists()){
+        if (!directory.exists()) {
             directory.mkdir();
             // If you require it to make the entire directory path including parents,
             // use directory.mkdirs(); here instead.
         }
 
         File file = new File(PATH + "/" + fileName);
-
-
-
 
 
 //        Environment.getRootDirectory();
@@ -88,12 +86,11 @@ public class RecordPage extends AppCompatActivity {
                 if (allAcceptedPermission(permision)) {
 
                     startRecording();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(RecordPage.this, "You need All permision", Toast.LENGTH_SHORT).show();
                     ActivityCompat.requestPermissions(RecordPage.this, permision, REQUEST_CODE_PERMISSION);
-                };
+                }
+                ;
             }
         });
 
@@ -104,6 +101,24 @@ public class RecordPage extends AppCompatActivity {
             }
         });
 
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(mr!=null)
+//                {
+//                    mr.pause();
+//                }
+//            }
+//        });
+//        btnPlay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(mr!=null)
+//                {
+//                    mr.resume();
+//                }
+//            }
+//        });
 
     }
 
@@ -137,7 +152,6 @@ public class RecordPage extends AppCompatActivity {
         for (String permission : permisions) {
             if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
-
             }
 
         }

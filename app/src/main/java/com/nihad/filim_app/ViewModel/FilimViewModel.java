@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.paging.PagedList;
 
 import com.nihad.filim_app.database.repository.FilimModelRepository;
 import com.nihad.filim_app.model.FilimModel;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class FilimViewModel extends AndroidViewModel {
     private FilimModelRepository repository;
-    private LiveData<List<FilimModel>> allNotes;
+    private LiveData<PagedList<FilimModel>> allNotes;
 
     public FilimViewModel(@NonNull Application application) {
         super(application);
@@ -43,7 +44,7 @@ public class FilimViewModel extends AndroidViewModel {
 
 
 
-    public LiveData<List<FilimModel>> getAllFilim() {
+    public LiveData<PagedList<FilimModel>> getAllFilim() {
         return repository.getTasks();
     }
 }

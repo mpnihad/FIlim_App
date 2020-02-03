@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 import androidx.room.Room;
 
 import com.nihad.filim_app.database.db.FilimDatabase;
@@ -98,8 +100,16 @@ public class FilimModelRepository {
         return filimDatabase.daoAccess().getTask_group(id);
     }
 
-    public LiveData<List<FilimModel>> getTasks() {
-        return filimDatabase.daoAccess().fetchAllTasks_group();
+    public LiveData<PagedList<FilimModel>> getTasks() {
+
+        PagedList.Config pagedListConfig=(new PagedList.Config.Builder()).setEnablePlaceholders(true)
+                .setPrefetchDistance(10)
+                .setPageSize(20).build();
+
+        LiveData<PagedList<FilimModel>> filimList;
+        filimList = new LivePagedListBuilder<>(
+                filimDatabase.daoAccess().fetchAllTasks_group(), pagedListConfig).build();
+        return filimList;
     }
 
 
